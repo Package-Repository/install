@@ -42,14 +42,14 @@ get_repo_loop()
     done
 }
 
-handle_all_flag()
+main()
 {
     while [[ $# -gt 0 ]]; do
         case "$1" in
             -a|--all)
-                REPOS=($repo_names)
-                for REPO in $REPOS; do
-                    git clone $PACKAGE_REPO/$REPO.git
+                REPOS=($(get_repo_names))
+                for REPO in "${REPOS[@]}"; do
+                    git clone "$PACKAGE_REPO/$REPO.git"
                     install.sh
                 done
                 exit 0
@@ -57,10 +57,6 @@ handle_all_flag()
         esac
         shift
     done
-}
-
-main()
-{
     tool_introduction
     get_repo_loop
 }
