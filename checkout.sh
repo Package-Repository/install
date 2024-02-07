@@ -2,7 +2,7 @@
 
 # @Zix Checkout Script to Easily Download Mechatronics Code
 # DEPENDENCIES: Assumes you have a script called install.sh on computer as well as a json parsing package called jq for the github request
-# The script should handle the cases where these dependencies aren't met
+# The script should hopefully handle the cases where these dependencies aren't met
 
 PACKAGE_REPO="https://github.com/Package-Repository"
 JSON_PARSE_PACKAGE="jq" # DEPENDENCY
