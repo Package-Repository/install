@@ -13,7 +13,7 @@ This Repo is designed to help an environment get accustomed to the mechatronics 
 Run these commands to set up your system with the mechatronics packages
     
     bash install.sh
-    cat export.sh | echo >> ~/.bashrc
+    cat export.sh | tee -a ~/.bashrc > /dev/null
 
 This will add ROBOT_LIB to your bashrc and create these first scripts.
 Now you can use the checkout.sh command to see our github repos. 
