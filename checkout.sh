@@ -1,17 +1,35 @@
 #!/bin/bash
 
 # @Zix Checkout Script to Easily Download Mechatronics Code
+# DEPENDENCIES: Assumes you have a script called install.sh on computer as well as a json parsing package called jq for the github request
+# The script should handle the cases where these dependencies aren't met
 
 PACKAGE_REPO="https://github.com/Package-Repository"
+JSON_PARSE_PACKAGE="jq" # DEPENDENCY
 
-check_jq_install()
+check_install_script_exists()
 {
-    if ! command -v jq &> /dev/null; then
-    echo "Error: jq is not installed. Please install jq to run this script."
-    exit 1
+    if [ -e "$SCRIPT_PATH" ]; then
+        echo "install.sh exists, continuing..."
+    else
+        echo "install.sh does not exist"
+        exit 0
     fi
 }
 
+# Use this to install dependency jq
+install_package()
+{
+    if ! dpkg -l | grep -qw $1; then
+        echo "$1 is not installed. Installing..."
+        sudo apt-get update
+        sudo apt-get install -y $1
+    else
+        echo "$1 is already installed; continuing."
+    fi
+}
+
+# Uses Github API to get names of our packages
 get_repo_names()
 {
     ORG_NAME="Package-Repository"
@@ -22,16 +40,20 @@ get_repo_names()
 
 tool_introduction() 
 {
-    echo "Hello! Welcome to the Mechatronics checkout tool! This is meant to help you download the package(s) you would like to utilize on the robot"
-    echo "Here is the list of available packages"
+    echo -e "\n"
+    echo -e "Hello! Welcome to the Mechatronics checkout tool! This is meant to help you download the package(s) you would like to utilize on the robot. \n"
+    echo -e "If you want to download all packages run this script with this format checkout.sh -a \n"
+    echo -e "Here is the list of available packages: \n"
+    echo "------------------------------------------"
     get_repo_names
+    echo -e "\n"
 }
 
 get_repo_loop()
 {
     while true;
     do
-        echo "Enter repo name: " 
+        echo -e "\n Enter the name of a package you would like to download to this computer: " 
         read REPOSITORY
         if [ $? -eq 0 ]; then
             git clone $PACKAGE_REPO/$REPOSITORY.git
@@ -42,18 +64,23 @@ get_repo_loop()
     done
 }
 
+# Script should download all packages when called like this checkout.sh -a
+handle_a_flag()
+{
+    REPOS=($(get_repo_names))
+    for REPO in "${REPOS[@]}"; do
+        git clone "$PACKAGE_REPO/$REPO.git"
+        install.sh
+    done
+    exit 0
+}
+
 main()
 {
+    install_package $JSON_PARSE_PACKAGE
     while [[ $# -gt 0 ]]; do
-        case "$1" in
-            -a|--all)
-                REPOS=($(get_repo_names))
-                for REPO in "${REPOS[@]}"; do
-                    git clone "$PACKAGE_REPO/$REPO.git"
-                    install.sh
-                done
-                exit 0
-                ;;
+        case "$1" in -a|--all)
+            handle_a_flag 
         esac
         shift
     done

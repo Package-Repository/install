@@ -8,4 +8,13 @@ This Repo is designed to help an environment get accustomed to the mechatronics 
 - `checkout.sh` - Will download appropriate package from the mechatronics github package repository
 - `export.sh` - This can be sourced to export ROBOT_LIB to PATH and PYTHONPATH to run scripts from anywhere on the system
 
-## mechtool - Ryan's tool Ryan write README stuff here when you're done
+## Getting Started
+
+Run these commands to set up your system with the mechatronics packages
+    
+    bash install.sh
+    cat export.sh | echo >> ~/.bashrc
+
+This will add ROBOT_LIB to your bashrc and create these first scripts.
+Now you can use the checkout.sh command to see our github repos. 
+
