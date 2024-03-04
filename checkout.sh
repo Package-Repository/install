@@ -43,7 +43,7 @@ tool_introduction()
     echo -e "\n"
     echo -e "Hello! Welcome to the Mechatronics checkout tool! This is meant to help you download the package(s) you would like to utilize on the robot. \n"
     echo -e "If you want to download all packages run this script with this format checkout.sh -a \n"
-    echo -e "Here is the list of available packages: \n"
+    echo -e "Remember you can press q to quit at any time. Here is the list of available packages: \n"
     echo "------------------------------------------"
     get_repo_names
     echo -e "\n"
@@ -55,8 +55,11 @@ get_repo_loop()
     do
         echo -e "\n Enter the name of a package you would like to download to this computer: " 
         read REPOSITORY
-        if [ $? -eq 0 ]; then
-            git clone $PACKAGE_REPO/$REPOSITORY.git
+        status=$? 
+        if [ $REPOSITORY == 'q' ]; then
+            exit 1
+        elif [ $status -eq 0 ]; then
+            git clone $PACKAGE_REPO/$REPOSITORY.git --recurse-submodules
             install.sh
         else
             echo "Error: Cloning repository failed."
@@ -69,7 +72,7 @@ handle_a_flag()
 {
     REPOS=($(get_repo_names))
     for REPO in "${REPOS[@]}"; do
-        git clone "$PACKAGE_REPO/$REPO.git"
+        git clone "$PACKAGE_REPO/$REPO.git" --recurse-submodules
         install.sh
     done
     exit 0
