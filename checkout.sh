@@ -57,7 +57,7 @@ get_repo_loop()
         read REPOSITORY
         status=$? 
         if [ $REPOSITORY == 'q' ]; then
-            exit 1
+            break
         elif [ $status -eq 0 ]; then
             git clone $PACKAGE_REPO/$REPOSITORY.git --recurse-submodules
             install.sh
