@@ -60,7 +60,6 @@ get_repo_loop()
             break
         elif [ $status -eq 0 ]; then
             git clone $PACKAGE_REPO/$REPOSITORY.git --recurse-submodules
-            install.sh
         else
             echo "Error: Cloning repository failed."
         fi
@@ -73,7 +72,6 @@ handle_a_flag()
     REPOS=($(get_repo_names))
     for REPO in "${REPOS[@]}"; do
         git clone "$PACKAGE_REPO/$REPO.git" --recurse-submodules
-        install.sh
     done
     exit 0
 }
