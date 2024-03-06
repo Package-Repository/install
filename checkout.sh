@@ -60,6 +60,7 @@ get_repo_loop()
             break
         elif [ $status -eq 0 ]; then
             git clone $PACKAGE_REPO/$REPOSITORY.git --recurse-submodules
+            cd $REPOSITORY git submodule update --recursive --remote
         else
             echo "Error: Cloning repository failed."
         fi
